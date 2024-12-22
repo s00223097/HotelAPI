@@ -21,7 +21,7 @@ namespace HotelAPI.Services
             }
         }
         /// <summary>
-        /// Method to get all hotels
+        /// Method to get all hotels.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Hotel> GetAllHotels() => _hotels;
@@ -34,6 +34,15 @@ namespace HotelAPI.Services
         public Hotel GetHotelById(int id)
         {
             return _hotels.FirstOrDefault(h => h.Id == id);
+        }
+
+        /// <summary>
+        /// Method to implement GetAllHotelsAsync() as in: almost in parallel
+        /// </summary>
+        /// <returns></returns>
+        public Task<IEnumerable<Hotel>> GetAllHotelsAsync()
+        {
+            return Task.FromResult(GetAllHotels());
         }
     }
 }
