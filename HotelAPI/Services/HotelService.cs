@@ -13,10 +13,14 @@ namespace HotelAPI.Services
             {
                 var jsonData = File.ReadAllText("hotels.json"); // read the json file
                 // Parse the json data and store it in the _hotels list
-                _hotels = JsonSerializer.Deserialize<List<Hotel>>(jsonData) ?? new List<Hotel>();
+                _hotels = JsonSerializer.Deserialize<List<Hotel>>(jsonData, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true // case insensitive 
+                }) ?? new List<Hotel>();
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Error loading hotel data: {ex.Message}");
                 throw new Exception("Error loading hotel data - couldn't read hotels in from the json file.", ex);
             }
         }
@@ -31,7 +35,7 @@ namespace HotelAPI.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Hotel GetHotelById(int id)
+        public Hotel? GetHotelById(int id)
         {
             return _hotels.FirstOrDefault(h => h.Id == id);
         }
