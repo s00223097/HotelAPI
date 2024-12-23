@@ -8,7 +8,7 @@ namespace HotelAPI.Repositories
     {
         IEnumerable<Hotel> GetAllHotels();
         Hotel GetHotelById(int id);
-        // AddHotel, UpdateHotel, DeleteHotel
+        // AddHotel, UpdateHotel, DeleteHotel... 
 
         Task<IEnumerable<Hotel>> GetAllHotelsAsync();
     }

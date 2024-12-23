@@ -2,42 +2,68 @@ using HotelAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using System.Text.Json;
 
 namespace HotelAPI.Repositories
 {
     public class HotelRepository : IHotelRepository
     {
-        // In-memory collection of hotels
-        private readonly List<Hotel> _hotels;
+        // List to store hotels in memory
+        private readonly List<Hotel> _hotels = new List<Hotel>();
+        // Path to JSON file containing hotel data - file in the project folder
+        private readonly string _filePath = "hotels.json";
+        
 
+        // Constructor - loads hotels from JSON file when repository is created
         public HotelRepository()
         {
-            // Initialize with some data or load from a data source
-            _hotels = new List<Hotel>
+            try
             {
-                // Example data
-                new Hotel { Id = 1, Name = "Seaside Paradise", Location = "Maldives", Rating = 4.9, ImageUrl = "https://example.com/images/seaside-paradise.jpg", DatesOfTravel = new List<string> { "2024-01-01", "2024-01-07" }, BoardBasis = "All Inclusive", Rooms = new List<Room> { new Room { RoomType = "Deluxe Suite", Amount = 5 } } }
-                // Add more hotels as needed
-            };
+                // Read JSON file contents
+                var json = File.ReadAllText(_filePath);
+                Console.WriteLine("JSON Content: " + json); // for debugging
+
+                // Deserialize JSON to list of hotels with case-insensitive option
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                var hotels = JsonSerializer.Deserialize<List<Hotel>>(json, options);
+                if (hotels != null)
+                {
+                    _hotels = hotels;
+                }
+                else
+                {
+                    Console.WriteLine("Deserialization resulted in null.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log any errors that occur during file loading 
+                Console.WriteLine($"Error loading hotels: {ex.Message}");
+            }
         }
 
-        // Returns all hotels in the repository
+        // Get all hotels from the repository
         public IEnumerable<Hotel> GetAllHotels()
         {
+            Console.WriteLine($"Total hotels in repository: {_hotels.Count}"); // Debugging
             return _hotels;
         }
 
-        // Finds and returns a hotel by its ID, or null if not found
+        // Get a single hotel by its ID
         public Hotel GetHotelById(int id)
         {
             // return the first hotel with the matching ID, or null if no match is found
-            return _hotels.FirstOrDefault(h => h.Id == id); 
+            return _hotels.FirstOrDefault(h => h.Id == id);  
         }
 
-        // Asynchronously retrieves all hotels
+        // Get all hotels asynchronously
         public async Task<IEnumerable<Hotel>> GetAllHotelsAsync()
         {
-            // Example implementation using an asynchronous database call
+            // Simulates async database call using Task.Run -> more for a real database
             return await Task.Run(() => GetAllHotels());
         }
     }

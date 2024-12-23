@@ -31,6 +31,7 @@ namespace HotelAPI.Controllers
             try
             {
                 var hotels = _hotelService.GetAllHotels(); // get all the hotels from the json file
+                Console.WriteLine($"Number of hotels retrieved: {hotels.Count()}"); // Debugging output
                 return Ok(hotels); // return the hotels as a json object
             }
             catch (Exception ex)
