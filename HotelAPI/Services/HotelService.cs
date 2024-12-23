@@ -1,52 +1,37 @@
 ﻿using HotelAPI.Models;
-using System.Text.Json;
+using HotelAPI.Repositories;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace HotelAPI.Services
 {
     public class HotelService : IHotelService
     {
-        // private List of hotels of type Hotel
-        private readonly List<Hotel> _hotels;
-        public HotelService()
-        {
-            try
-            {
-                var jsonData = File.ReadAllText("hotels.json"); // read the json file
-                // Parse the json data and store it in the _hotels list
-                _hotels = JsonSerializer.Deserialize<List<Hotel>>(jsonData, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true // case insensitive 
-                }) ?? new List<Hotel>();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading hotel data: {ex.Message}");
-                throw new Exception("Error loading hotel data - couldn't read hotels in from the json file.", ex);
-            }
-        }
-        /// <summary>
-        /// Method to get all hotels.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<Hotel> GetAllHotels() => _hotels;
+        // Repository for accessing hotel data
+        private readonly IHotelRepository _hotelRepository;
 
-        /// <summary>
-        /// LINQ Query method to get a hotel by its id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Hotel? GetHotelById(int id)
+        // Constructor - injects hotel repository dependency
+        public HotelService(IHotelRepository hotelRepository)
         {
-            return _hotels.FirstOrDefault(h => h.Id == id);
+            _hotelRepository = hotelRepository;
         }
 
-        /// <summary>
-        /// Method to implement GetAllHotelsAsync() as in: almost in parallel
-        /// </summary>
-        /// <returns></returns>
-        public Task<IEnumerable<Hotel>> GetAllHotelsAsync()
+        // Gets all hotels from the repository
+        public IEnumerable<Hotel> GetAllHotels()
         {
-            return Task.FromResult(GetAllHotels());
+            return _hotelRepository.GetAllHotels();
+        }
+
+        // Gets a specific hotel by its ID
+        public Hotel GetHotelById(int id)
+        {
+            return _hotelRepository.GetHotelById(id);
+        }
+
+        // Asynchronously gets all hotels from the repository
+        public async Task<IEnumerable<Hotel>> GetAllHotelsAsync()
+        {
+            return await _hotelRepository.GetAllHotelsAsync();
         }
     }
 }

@@ -2,11 +2,13 @@ using HotelAPI.Services;
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 using HotelAPI.Validators;
+using HotelAPI.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddSingleton<IHotelRepository, HotelRepository>();
 builder.Services.AddSingleton<IHotelService, HotelService>();
 builder.Services.AddValidatorsFromAssemblyContaining<HotelIdValidator>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
