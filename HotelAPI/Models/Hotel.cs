@@ -10,7 +10,7 @@
     }
 
     /// <summary>
-    /// Represents all the entities in a Hotel. 
+    /// Represents all the properties of a Hotel. 
     /// </summary>
     public class Hotel
     {

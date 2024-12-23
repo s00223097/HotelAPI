@@ -2,6 +2,7 @@
 {
     public class ErrorResponse
     {
+        // Extremely basic error response class
         public string Message { get; set; }
         public string Details { get; set; }
 
