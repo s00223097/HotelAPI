@@ -1,4 +1,4 @@
-# Hotel Single Page Application (SPA) and Web API
+# Simple Hotel Single Page Application (SPA) and Web API
 - Frontend - React, Typescript
 - Backend API - C#, .NET Core 
 ## Running the frontend
